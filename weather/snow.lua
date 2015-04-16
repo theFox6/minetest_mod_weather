@@ -1,40 +1,41 @@
 -- Snow
+local spawnerdef = {
+	amount = 8,
+	time = 0.5,
+	minexptime = 3,
+	maxexptime = 15,
+	minsize = 0.8,
+	maxsize = 1.2,
+	collisiondetection = true,
+}
 minetest.register_globalstep(function(dtime)
-	if weather ~= "snow" then return end
+	if weather ~= "snow" then
+		return
+	end
 	for _, player in ipairs(minetest.get_connected_players()) do
 		local ppos = player:getpos()
 
 		-- Make sure player is not in a cave/house...
-		if minetest.env:get_node_light(ppos, 0.5) ~= 15 then return end
+		--if minetest.get_node_light(ppos, 0.5) ~= 15 then return end
 
-		local minp = addvectors(ppos, {x=-9, y=7, z=-9})
-		local maxp = addvectors(ppos, {x= 9, y=7, z= 9})
+		spawnerdef.minpos = addvectors(ppos, {x=-9, y=7, z=-9})
+		spawnerdef.maxpos = addvectors(ppos, {x= 9, y=7, z= 9})
 
-		local minp_deep = addvectors(ppos, {x=-10, y=3.2, z=-10})
-		local maxp_deep = addvectors(ppos, {x= 10, y=2.6, z= 10})
+		spawnerdef.minvel = {x=0, y= -1, z=0}
+		spawnerdef.maxvel = spawnerdef.minvel
+		spawnerdef.minacc = {x=0, y= 0, z=0}
+		spawnerdef.maxacc = spawnerdef.minacc
 
-		local vel = {x=0, y=   -0.5, z=0}
-		local acc = {x=0, y=   -0.5, z=0}
+		spawnerdef.playername = player:get_player_name()
 
-		minetest.add_particlespawner(5, 0.5,
-			minp, maxp,
-			vel, vel,
-			acc, acc,
-			5, 5,
-			25, 25,
-			false, "weather_snow.png", player:get_player_name())
-
-		minetest.add_particlespawner(4, 0.5,
-			minp_deep, maxp_deep,
-			vel, vel,
-			acc, acc,
-			4, 4,
-			25, 25,
-			false, "weather_snow.png", player:get_player_name())
+		for _,i in ipairs({"", "2"}) do
+			spawnerdef.texture = "weather_snow"..i..".png"
+			minetest.add_particlespawner(spawnerdef)
+		end
 	end
 end)
 
-local snow_box =
+--[[local snow_box =
 {
 	type  = "fixed",
 	fixed = {-0.5, -0.5, -0.5, 0.5, -0.4, 0.5}
@@ -51,7 +52,7 @@ minetest.register_node("weather:snow_cover", {
 	drop = {}
 })
 
---[[ Enable this section if you have a very fast PC
+--[ Enable this section if you have a very fast PC
 minetest.register_abm({
 	nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},
 	neighbors = {"default:air"},

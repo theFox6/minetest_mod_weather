@@ -1,24 +1,35 @@
 -- Rain
+local spawnerdef = {
+	amount = 25,
+	time = 0.5,
+	minexptime = 0.8,
+	maxexptime = 0.8,
+	minsize = 0.8,
+	maxsize = 1.2,
+	collisiondetection = true,
+	vertical = true,
+	texture = "weather_rain.png",
+}
 minetest.register_globalstep(function(dtime)
-	if weather ~= "rain" then return end
+	if weather ~= "rain" then
+		return
+	end
 	for _, player in ipairs(minetest.get_connected_players()) do
 		local ppos = player:getpos()
 
 		-- Make sure player is not in a cave/house...
-		if minetest.env:get_node_light(ppos, 0.5) ~= 15 then return end
+		--if minetest.get_node_light(ppos, 0.5) ~= 15 then return end
 
-		local minp = addvectors(ppos, {x=-9, y=7, z=-9})
-		local maxp = addvectors(ppos, {x= 9, y=7, z= 9})
+		spawnerdef.minpos = addvectors(ppos, {x=-9, y=7, z=-9})
+		spawnerdef.maxpos = addvectors(ppos, {x= 9, y=7, z= 9})
 
-		local vel = {x=0, y=   -4, z=0}
-		local acc = {x=0, y=-9.81, z=0}
+		spawnerdef.minvel = {x=0, y= -40, z=0}
+		spawnerdef.maxvel = spawnerdef.minvel
+		spawnerdef.minacc = {x=0, y= 0, z=0}
+		spawnerdef.maxacc = spawnerdef.minacc
 
-		minetest.add_particlespawner({amount=25, time=0.5,
-			minpos=minp, maxpos=maxp,
-			minvel=vel, maxvel=vel,
-			minacc=acc, maxacc=acc,
-			minexptime=0.8, maxexptime=0.8,
-			minsize=25, maxsize=25,
-			collisiondetection=false, vertical=true, texture="weather_rain.png", player=player:get_player_name()})
+		spawnerdef.playername = player:get_player_name()
+
+		minetest.add_particlespawner(spawnerdef)
 	end
 end)

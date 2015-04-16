@@ -26,17 +26,18 @@ end
 weather = read_weather()
 
 minetest.register_globalstep(function(dtime)
-	if weather == "rain" or weather == "snow" then
+	if weather == "rain"
+	or weather == "snow" then
 		if math.random(1, 10000) == 1 then
 			weather = "none"
 			save_weather()
 		end
 	else
-		if math.random(1, 50000) == 1 then
+		local ran = math.random(1, 5000000)
+		if ran == 1 then
 			weather = "rain"
 			save_weather()
-		end
-		if math.random(1, 50000) == 2 then
+		elseif ran == 2 then
 			weather = "snow"
 			save_weather()
 		end
