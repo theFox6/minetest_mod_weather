@@ -63,9 +63,9 @@ minetest.register_abm({
 			if minetest.registered_nodes[node.name].drawtype == "normal"
 			or minetest.registered_nodes[node.name].drawtype == "allfaces_optional" then
 				local np = addvectors(pos, {x=0, y=1, z=0})
-				if minetest.env:get_node_light(np, 0.5) == 15
-				and minetest.env:get_node(np).name == "air" then
-					minetest.env:add_node(np, {name="weather:snow_cover"})
+				if minetest.get_node_light(np, 0.5) == 15
+				and minetest.get_node(np).name == "air" then
+					minetest.add_node(np, {name="weather:snow_cover"})
 				end
 			end
 		end
