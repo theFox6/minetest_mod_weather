@@ -66,8 +66,8 @@ minetest.register_abm({
 				local np = addvectors(pos, {x=0, y=1, z=0})
 				if minetest.env:get_node_light(np, 0.5) == 15
 				and minetest.env:get_node(np).name == "air" then
-					--minetest.env:add_node(np, {name="weather:snow_cover"})
-					minetest.env:add_node(np, {name="default:snow"})
+					minetest.env:add_node(np, {name="weather:snow_cover"})
+					--minetest.env:add_node(np, {name="default:snow"})
 				end
 			end
 		end
