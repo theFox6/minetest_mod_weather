@@ -38,7 +38,6 @@ minetest.register_abm({
 				if minetest.env:get_node_light(np, 0.5) == 15
 				and minetest.env:get_node(np).name == "air" then
 					minetest.env:add_node(np, {name="waterplus:finite_1"})
-					--minetest.env:add_node(np, {name="default:snow"}) --for carbone :)
 				end
 			end
 		end
