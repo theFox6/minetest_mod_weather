@@ -22,3 +22,26 @@ minetest.register_globalstep(function(dtime)
 			collisiondetection=false, vertical=true, texture="weather_rain.png", player=player:get_player_name()})
 	end
 end)
+
+-- Might want to comment this section out if you don't have a fast computer
+if minetest.get_modpath("waterplus") then
+minetest.register_abm({
+	nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},
+	neighbors = {"default:air"},
+	interval = 10.0, 
+	chance = 80,
+	action = function (pos, node, active_object_count, active_object_count_wider)
+		if weather == "rain" then
+			if minetest.registered_nodes[node.name].drawtype == "normal"
+			or minetest.registered_nodes[node.name].drawtype == "allfaces_optional" then
+				local np = addvectors(pos, {x=0, y=1, z=0})
+				if minetest.env:get_node_light(np, 0.5) == 15
+				and minetest.env:get_node(np).name == "air" then
+					minetest.env:add_node(np, {name="waterplus:finite_1"})
+					--minetest.env:add_node(np, {name="default:snow"}) --for carbone :)
+				end
+			end
+		end
+	end
+})
+end

@@ -51,6 +51,8 @@ minetest.register_node("weather:snow_cover", {
 	drop = {}
 })
 
+
+
 --[[ Enable this section if you have a very fast PC
 minetest.register_abm({
 	nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},
@@ -64,10 +66,11 @@ minetest.register_abm({
 				local np = addvectors(pos, {x=0, y=1, z=0})
 				if minetest.env:get_node_light(np, 0.5) == 15
 				and minetest.env:get_node(np).name == "air" then
-					minetest.env:add_node(np, {name="weather:snow_cover"})
+					--minetest.env:add_node(np, {name="weather:snow_cover"})
+					minetest.env:add_node(np, {name="default:snow"})
 				end
 			end
 		end
 	end
-})
-]]
+})]]
+
