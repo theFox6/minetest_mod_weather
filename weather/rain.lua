@@ -1,5 +1,5 @@
 --adding weather.conf
-print("Lol print works")
+
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 local worldpath = minetest.get_worldpath()
 local input = io.open(modpath.."/weather.conf", "r")
