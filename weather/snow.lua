@@ -1,3 +1,19 @@
+--adding weather.conf
+local modpath = minetest.get_modpath(minetest.get_current_modname())
+local worldpath = minetest.get_worldpath()
+local input = io.open(modpath.."/weather.conf", "r")
+if input then
+	dofile(modpath.."/weather.conf")
+	input:close()
+	input = nil
+end
+input = io.open(worldpath.."/weather.conf", "r")
+if input then
+	dofile(worldpath.."/weather.conf")
+	input:close()
+	input = nil
+end
+
 -- Snow
 minetest.register_globalstep(function(dtime)
 	if weather ~= "snow" then return end
@@ -53,7 +69,8 @@ minetest.register_node("weather:snow_cover", {
 
 
 
---[[ Enable this section if you have a very fast PC
+-- Enable this section if you have a very fast PC
+if SNOW_COVER then
 minetest.register_abm({
 	nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},
 	neighbors = {"default:air"},
@@ -66,11 +83,14 @@ minetest.register_abm({
 				local np = addvectors(pos, {x=0, y=1, z=0})
 				if minetest.env:get_node_light(np, 0.5) == 15
 				and minetest.env:get_node(np).name == "air" then
-					minetest.env:add_node(np, {name="weather:snow_cover"})
-					--minetest.env:add_node(np, {name="default:snow"})
+					--if USE_DEFAULT_SNOW then
+						minetest.env:add_node(np, {name="default:snow"})
+					--else
+						--minetest.env:add_node(np, {name="weather:snow_cover"})
+					--end
 				end
 			end
 		end
 	end
-})]]
-
+})
+end

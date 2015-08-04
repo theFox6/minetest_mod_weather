@@ -2,7 +2,7 @@
 -- * rain
 -- * snow
 -- * wind (not implemented)
-
+print("Lol print works")
 assert(minetest.add_particlespawner, "I told you to run the latest GitHub!")
 
 addvectors = function (v1, v2)
