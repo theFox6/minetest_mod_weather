@@ -42,7 +42,6 @@ minetest.register_globalstep(function(dtime)
 end)
 
 -- Might want to comment this section out if you don't have a fast computer
---if RAIN_DROPS then
 if RAIN_DROPS and minetest.get_modpath("waterplus") then
 minetest.register_abm({
 	nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},
@@ -56,11 +55,8 @@ minetest.register_abm({
 				local np = addvectors(pos, {x=0, y=1, z=0})
 				if minetest.env:get_node_light(np, 0.5) == 15
 				and minetest.env:get_node(np).name == "air" then
-					--if minetest.get_modpath("waterplus") then
-						--minetest.env:add_node(np, {name="waterplus:finite_1"})
-					--else
-						minetest.env:add_node(np, {name="default:water_flowing"})
-					--end
+					minetest.env:add_node(np, {name="waterplus:finite_1"})
+					--minetest.env:add_node(np, {name="default:water_flowing"})
 				end
 			end
 		end
