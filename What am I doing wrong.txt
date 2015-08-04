@@ -1,0 +1,128 @@
+--taken from my own modified version of weather mod, https://github.com/sloantothebone/minetest-mod-weather
+--there is no default:water_flowing seen during rain and RAIN_DROPS = true, and weather:snow_cover when SNOW_COVER = true and USE_DEFAULT_SNOW = true
+
+--config file description of what the code is supposed to do:
+
+--This controls whether the ground is covered with precipitation.
+--If the waterplus mod is activated, rain will drop waterplus:finite_1. 
+--Otherwise, it will use default:water_flowing which will most likely disappear immediately. 
+--It should look like rain drops soaking into the ground or something.
+
+--SNOW_COVER activates snow covering the ground when it falls. 
+--By default the mod uses its own snow, weather:snow_cover so I added the option USE_DEFAULT_SNOW which makes the mod use default:snow.
+
+
+
+
+--broken code
+
+if RAIN_DROPS then
+--if RAIN_DROPS and minetest.get_modpath("waterplus") then
+minetest.register_abm({
+	nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},
+	neighbors = {"default:air"},
+	interval = 10.0, 
+	chance = 80,
+	action = function (pos, node, active_object_count, active_object_count_wider)
+		if weather == "rain" then
+			if minetest.registered_nodes[node.name].drawtype == "normal"
+			or minetest.registered_nodes[node.name].drawtype == "allfaces_optional" then
+				local np = addvectors(pos, {x=0, y=1, z=0})
+				if minetest.env:get_node_light(np, 0.5) == 15
+				and minetest.env:get_node(np).name == "air" then
+					if minetest.get_modpath("waterplus") then
+						minetest.env:add_node(np, {name="waterplus:finite_1"})
+					else
+						minetest.env:add_node(np, {name="default:water_flowing"})
+					end
+				end
+			end
+		end
+	end
+})
+end
+
+
+if SNOW_COVER then
+minetest.register_abm({
+	nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},
+	neighbors = {"default:air"},
+	interval = 10.0, 
+	chance = 80,
+	action = function (pos, node, active_object_count, active_object_count_wider)
+		if weather == "snow" then
+			if minetest.registered_nodes[node.name].drawtype == "normal"
+			or minetest.registered_nodes[node.name].drawtype == "allfaces_optional" then
+				local np = addvectors(pos, {x=0, y=1, z=0})
+				if minetest.env:get_node_light(np, 0.5) == 15
+				and minetest.env:get_node(np).name == "air" then
+					if USE_DEFAULT_SNOW then
+						minetest.env:add_node(np, {name="default:snow"})
+					else
+						minetest.env:add_node(np, {name="weather:snow_cover"})
+					end
+				end
+			end
+		end
+	end
+})
+end
+
+
+
+
+
+
+--working code
+
+--if RAIN_DROPS then
+if RAIN_DROPS and minetest.get_modpath("waterplus") then
+minetest.register_abm({
+	nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},
+	neighbors = {"default:air"},
+	interval = 10.0, 
+	chance = 80,
+	action = function (pos, node, active_object_count, active_object_count_wider)
+		if weather == "rain" then
+			if minetest.registered_nodes[node.name].drawtype == "normal"
+			or minetest.registered_nodes[node.name].drawtype == "allfaces_optional" then
+				local np = addvectors(pos, {x=0, y=1, z=0})
+				if minetest.env:get_node_light(np, 0.5) == 15
+				and minetest.env:get_node(np).name == "air" then
+					--if minetest.get_modpath("waterplus") then
+						--minetest.env:add_node(np, {name="waterplus:finite_1"})
+					--else
+						minetest.env:add_node(np, {name="default:water_flowing"})
+					--end
+				end
+			end
+		end
+	end
+})
+end
+
+
+if SNOW_COVER then
+minetest.register_abm({
+	nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},
+	neighbors = {"default:air"},
+	interval = 10.0, 
+	chance = 80,
+	action = function (pos, node, active_object_count, active_object_count_wider)
+		if weather == "snow" then
+			if minetest.registered_nodes[node.name].drawtype == "normal"
+			or minetest.registered_nodes[node.name].drawtype == "allfaces_optional" then
+				local np = addvectors(pos, {x=0, y=1, z=0})
+				if minetest.env:get_node_light(np, 0.5) == 15
+				and minetest.env:get_node(np).name == "air" then
+					--if USE_DEFAULT_SNOW then
+						minetest.env:add_node(np, {name="default:snow"})
+					--else
+						--minetest.env:add_node(np, {name="weather:snow_cover"})
+					--end
+				end
+			end
+		end
+	end
+})
+end
