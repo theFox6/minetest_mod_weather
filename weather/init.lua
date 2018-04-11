@@ -1,7 +1,7 @@
 -- Weather:
 -- * rain
 -- * snow
--- * wind (not implemented)
+-- * wind
 
 assert(minetest.add_particlespawner, "I told you to run the latest GitHub!")
 
@@ -11,33 +11,38 @@ end
 
 save_weather = function ()
 	local file = io.open(minetest.get_worldpath().."/weather", "w+")
-	file:write(weather)
+	file:write(minetest.serialize(weather))
 	file:close()
 end
 
 read_weather = function ()
 	local file = io.open(minetest.get_worldpath().."/weather", "r")
-	if not file then return end
-	local readweather = file:read()
+	if not file then return {type = "none", wind = 0} end
+	local readweather = minetest.deserialize(file:read())
 	file:close()
+	if type(readweather)~="table" then
+		return {type = "none", wind = 0}
+	end
 	return readweather
 end
 
 weather = read_weather()
 
 minetest.register_globalstep(function(dtime)
-	if weather == "rain" or weather == "snow" then
+	if weather.type == "rain" or weather.type == "snow" then
 		if math.random(1, 10000) == 1 then
-			weather = "none"
+			weather.type = "none"
 			save_weather()
 		end
 	else
 		if math.random(1, 50000) == 1 then
-			weather = "rain"
+			weather.wind = math.random(0,10)
+			weather.type = "rain"
 			save_weather()
 		end
 		if math.random(1, 50000) == 2 then
-			weather = "snow"
+			weather.wind = math.random(0,10)
+			weather.type = "snow"
 			save_weather()
 		end
 	end

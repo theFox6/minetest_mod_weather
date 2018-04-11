@@ -1,6 +1,6 @@
 -- Rain
 minetest.register_globalstep(function(dtime)
-	if weather ~= "rain" then return end
+	if weather.type ~= "rain" then return end
 	for _, player in ipairs(minetest.get_connected_players()) do
 		local ppos = player:getpos()
 
@@ -10,7 +10,7 @@ minetest.register_globalstep(function(dtime)
 		local minp = addvectors(ppos, {x=-9, y=7, z=-9})
 		local maxp = addvectors(ppos, {x= 9, y=7, z= 9})
 
-		local vel = {x=0, y=   -4, z=0}
+		local vel = {x=math.random()*weather.wind, y=   -4, z=math.random()*weather.wind}
 		local acc = {x=0, y=-9.81, z=0}
 
 		minetest.add_particlespawner({amount=25, time=0.5,

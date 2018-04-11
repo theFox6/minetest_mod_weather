@@ -1,6 +1,6 @@
 -- Snow
 minetest.register_globalstep(function(dtime)
-	if weather ~= "snow" then return end
+	if weather.type ~= "snow" then return end
 	for _, player in ipairs(minetest.get_connected_players()) do
 		local ppos = player:getpos()
 
@@ -13,7 +13,7 @@ minetest.register_globalstep(function(dtime)
 		local minp_deep = addvectors(ppos, {x=-10, y=3.2, z=-10})
 		local maxp_deep = addvectors(ppos, {x= 10, y=2.6, z= 10})
 
-		local vel = {x=0, y=   -0.5, z=0}
+		local vel = {x=math.random()*weather.wind, y=   -0.5, z=math.random()*weather.wind}
 		local acc = {x=0, y=   -0.5, z=0}
 
 		minetest.add_particlespawner(5, 0.5,
