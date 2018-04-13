@@ -7,8 +7,8 @@ minetest.register_globalstep(function(dtime)
 		-- Make sure player is not in a cave/house...
 		if minetest.env:get_node_light(ppos, 0.5) ~= 15 then return end
 
-		local minp = addvectors(ppos, {x=-9, y=7, z=-9})
-		local maxp = addvectors(ppos, {x= 9, y=7, z= 9})
+		local minp = vector.add(ppos, {x=-9, y=7, z=-9})
+		local maxp = vector.add(ppos, {x= 9, y=7, z= 9})
 
 		local vel = {x=math.random()*weather.wind, y=   -4, z=math.random()*weather.wind}
 		local acc = {x=0, y=-9.81, z=0}

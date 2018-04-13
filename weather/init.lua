@@ -5,10 +5,6 @@
 
 assert(minetest.add_particlespawner, "I told you to run the latest GitHub!")
 
-addvectors = function (v1, v2)
-	return {x=v1.x+v2.x, y=v1.y+v2.y, z=v1.z+v2.z}
-end
-
 save_weather = function ()
 	local file = io.open(minetest.get_worldpath().."/weather", "w+")
 	file:write(minetest.serialize(weather))

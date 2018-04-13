@@ -7,11 +7,11 @@ minetest.register_globalstep(function(dtime)
 		-- Make sure player is not in a cave/house...
 		if minetest.env:get_node_light(ppos, 0.5) ~= 15 then return end
 
-		local minp = addvectors(ppos, {x=-9, y=7, z=-9})
-		local maxp = addvectors(ppos, {x= 9, y=7, z= 9})
+		local minp = vector.add(ppos, {x=-9, y=7, z=-9})
+		local maxp = vector.add(ppos, {x= 9, y=7, z= 9})
 
-		local minp_deep = addvectors(ppos, {x=-10, y=3.2, z=-10})
-		local maxp_deep = addvectors(ppos, {x= 10, y=2.6, z= 10})
+		local minp_deep = vector.add(ppos, {x=-10, y=3.2, z=-10})
+		local maxp_deep = vector.add(ppos, {x= 10, y=2.6, z= 10})
 
 		local vel = {x=math.random()*weather.wind, y=   -0.5, z=math.random()*weather.wind}
 		local acc = {x=0, y=   -0.5, z=0}
@@ -61,7 +61,7 @@ minetest.register_abm({
 		if weather == "snow" then
 			if minetest.registered_nodes[node.name].drawtype == "normal"
 			or minetest.registered_nodes[node.name].drawtype == "allfaces_optional" then
-				local np = addvectors(pos, {x=0, y=1, z=0})
+				local np = vector.add(pos, {x=0, y=1, z=0})
 				if minetest.env:get_node_light(np, 0.5) == 15
 				and minetest.env:get_node(np).name == "air" then
 					minetest.env:add_node(np, {name="weather:snow_cover"})
