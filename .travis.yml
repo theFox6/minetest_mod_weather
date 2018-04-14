@@ -9,4 +9,5 @@ before_install:
 script: 
 - $HOME/.luarocks/bin/luacheck --no-color .
 notifications:
-email: false
+  email:
+    on_failure: change
