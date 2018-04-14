@@ -24,7 +24,7 @@ end
 
 weather = read_weather()
 
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function()
 	if weather.type == "rain" or weather.type == "snow" then
 		if math.random(1, 10000) == 1 then
 			weather.type = "none"

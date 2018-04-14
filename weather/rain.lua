@@ -1,5 +1,5 @@
 -- Rain
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function()
 	if weather.type ~= "rain" then return end
 	for _, player in ipairs(minetest.get_connected_players()) do
 		local ppos = player:getpos()

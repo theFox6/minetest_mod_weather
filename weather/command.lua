@@ -8,7 +8,7 @@ minetest.register_chatcommand("setweather", {
 	params = "<weather>",
 	description = "Set weather to rain, snow or none", -- full description
 	privs = {weather = true},
-	func = function(name, param)
+	func = function(_, param) --name, param
 		weather.type = param
 		save_weather()
 	end
