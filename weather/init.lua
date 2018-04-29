@@ -9,24 +9,26 @@ weather_mod={
 	modpath=minetest.get_modpath("weather"),
 }
 
-save_weather = function ()
-	local file = io.open(minetest.get_worldpath().."/weather", "w+")
-	file:write(minetest.serialize(weather))
-	file:close()
-end
+weather = (function()
+	local file_name = minetest.get_worldpath() .. "/weather"
 
-read_weather = function ()
-	local file = io.open(minetest.get_worldpath().."/weather", "r")
-	if not file then return {type = "none", wind = 0} end
-	local readweather = minetest.deserialize(file:read())
-	file:close()
-	if type(readweather)~="table" then
-		return {type = "none", wind = 0}
+	minetest.register_on_shutdown(function()
+		local file = io.open(file_name, "w")
+		file:write(minetest.serialize(weather))
+		file:close()
+	end)
+
+	local file = io.open(file_name, "r")
+	if file ~= nil then
+		local readweather = minetest.deserialize(file:read("*a"))
+		file:close()
+		if type(readweather)~="table" then
+			return {type = "none", wind = 0}
+		end
+		return readweather
 	end
-	return readweather
-end
-
-weather = read_weather()
+	return {type = "none", wind = vector.new(0,0,0)}
+end) ()
 
 dofile(weather_mod.modpath.."/api.lua")
 dofile(weather_mod.modpath.."/rain.lua")
