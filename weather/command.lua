@@ -6,7 +6,8 @@ minetest.register_privilege("weather", {
 -- Set weather
 minetest.register_chatcommand("setweather", {
 	params = "<weather>",
-	description = "Set weather to a registered type of downfall or show all types when nor parameters are given", -- full description
+	description = "Set weather to a registered type of downfall\
+		show all types when nor parameters are given", -- full description
 	privs = {weather = true},
 	func = function(name, param)
 		if param == nil or param == "" then

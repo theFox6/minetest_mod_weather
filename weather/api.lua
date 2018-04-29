@@ -47,7 +47,7 @@ function weather_mod.register_downfall(id,def)
 		ndef.amount = 10
 	end
 	if not ndef.exptime then
-		ndef.exptime = ndef.max_pos.y / (math.sqr(ndef.falling_acceleration) + ndef.falling_speed)
+		ndef.exptime = ndef.max_pos.y / (math.sqrt(ndef.falling_acceleration) + ndef.falling_speed)
 	end
 	if not ndef.texture then
 		error("no texture given")
@@ -60,7 +60,7 @@ end
 
 minetest.register_globalstep(function()
 	if weather.type=="none" then
-		for id,el in pairs(weather_mod.registered_downfalls) do
+		for id,_ in pairs(weather_mod.registered_downfalls) do
 			if math.random(1, 50000) == 1 then
 				weather.wind = {}
 				weather.wind.x = math.random(0,10)
