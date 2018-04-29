@@ -5,6 +5,10 @@
 
 assert(minetest.add_particlespawner, "I told you to run the latest GitHub!")
 
+weather_mod={
+	modpath=minetest.get_modpath("weather"),
+}
+
 save_weather = function ()
 	local file = io.open(minetest.get_worldpath().."/weather", "w+")
 	file:write(minetest.serialize(weather))
@@ -24,28 +28,7 @@ end
 
 weather = read_weather()
 
-minetest.register_globalstep(function()
-	if weather.type == "rain" or weather.type == "snow" then
-		if math.random(1, 10000) == 1 then
-			weather.type = "none"
-			save_weather()
-		end
-	else
-		if math.random(1, 50000) == 1 then
-			weather.wind = math.random(0,10)
-			weather.type = "rain"
-			save_weather()
-		end
-		if math.random(1, 50000) == 2 then
-			weather.wind = math.random(0,10)
-			weather.type = "snow"
-			save_weather()
-		end
-	end
-end)
-
-dofile(minetest.get_modpath("weather").."/rain.lua")
-dofile(minetest.get_modpath("weather").."/snow.lua")
-dofile(minetest.get_modpath("weather").."/command.lua")
-
-
+dofile(weather_mod.modpath.."/api.lua")
+dofile(weather_mod.modpath.."/rain.lua")
+dofile(weather_mod.modpath.."/snow.lua")
+dofile(weather_mod.modpath.."/command.lua")

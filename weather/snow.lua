@@ -1,38 +1,13 @@
 -- Snow
-minetest.register_globalstep(function()
-	if weather.type ~= "snow" then return end
-	for _, player in ipairs(minetest.get_connected_players()) do
-		local ppos = player:getpos()
-
-		-- Make sure player is not in a cave/house...
-		if minetest.env:get_node_light(ppos, 0.5) ~= 15 then return end
-
-		local minp = vector.add(ppos, {x=-9, y=7, z=-9})
-		local maxp = vector.add(ppos, {x= 9, y=7, z= 9})
-
-		local minp_deep = vector.add(ppos, {x=-10, y=3.2, z=-10})
-		local maxp_deep = vector.add(ppos, {x= 10, y=2.6, z= 10})
-
-		local vel = {x=math.random()*weather.wind, y=   -0.5, z=math.random()*weather.wind}
-		local acc = {x=0, y=   -0.5, z=0}
-
-		minetest.add_particlespawner(5, 0.5,
-			minp, maxp,
-			vel, vel,
-			acc, acc,
-			5, 5,
-			25, 25,
-			false, "weather_snow.png", player:get_player_name())
-
-		minetest.add_particlespawner(4, 0.5,
-			minp_deep, maxp_deep,
-			vel, vel,
-			acc, acc,
-			4, 4,
-			25, 25,
-			false, "weather_snow.png", player:get_player_name())
-	end
-end)
+weather_mod.register_downfall("weather:snow",{
+	min_pos = {x=-9, y=7, z=-9},
+	max_pos = {x= 9, y=7, z= 9},
+	falling_speed=5,
+	amount=10,
+	exptime=5,
+	size=25,
+	texture="weather_snow.png"
+})
 
 local snow_box =
 {
