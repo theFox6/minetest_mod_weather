@@ -17,7 +17,6 @@ minetest.register_chatcommand("setweather", {
 			minetest.chat_send_player(name, "avalible weather types: "..types)
 		else
 			weather.type = param
-			save_weather()
 		end
 	end
 })
@@ -40,7 +39,6 @@ minetest.register_chatcommand("setwind", {
 		end
 		if x and z then
 			weather.wind = vector.new(x,0,z)
-			save_weather()
 		else
 			minetest.chat_send_player(name, param.." are not two comma seperated numbers")
 		end
