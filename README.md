@@ -1,4 +1,4 @@
-Weather mod for Minetest (http://minetest.net/)
+Weather mod for [Minetest](http://minetest.net/)
 
 [![Build Status](https://travis-ci.org/theFox6/minetest_mod_weather.svg?branch=master)](https://travis-ci.org/theFox6/minetest_mod_weather)
 
