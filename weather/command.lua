@@ -18,6 +18,7 @@ minetest.register_chatcommand("setweather", {
 			minetest.chat_send_player(name, "avalible weather types: "..types)
 		else
 			weather.type = param
+			weather_mod.handle_lightning()
 		end
 	end
 })

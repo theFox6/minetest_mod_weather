@@ -55,38 +55,48 @@ function weather_mod.register_downfall(id,def)
 	if not ndef.size then
 		ndef.size = 25
 	end
-	weather_mod.registered_downfalls[name]=def
+	if not ndef.enable_lightning then
+		ndef.enable_lightning=false
+	end
+	weather_mod.registered_downfalls[name]=ndef
+end
+
+if minetest.get_modpath("lightning") then
+	lightning.auto = false
+end
+
+function weather_mod.handle_lightning()
+	if not minetest.get_modpath("lightning") then return end
+	local current_downfall = weather_mod.registered_downfalls[weather.type]
+	lightning.auto = current_downfall.enable_lightning
+	if current_downfall.enable_lightning and math.random(1,2) == 1 then
+		local time = math.floor(math.random(lightning.interval_low/2,lightning.interval_low))
+		minetest.after(time, lightning.strike)
+	end
 end
 
 minetest.register_globalstep(function()
 	if weather.type=="none" then
-		for id,_ in pairs(weather_mod.registered_downfalls) do
+		for id,el in pairs(weather_mod.registered_downfalls) do
 			if math.random(1, 50000) == 1 then
 				weather.wind = {}
 				weather.wind.x = math.random(0,10)
 				weather.wind.y = 0
 				weather.wind.z = math.random(0,10)
 				weather.type = id
+				weather_mod.handle_lightning()
 			end
 		end
 	else
 		if math.random(1, 10000) == 1 then
 			weather.type = "none"
+			lightning.auto = false
 		end
 	end
-	local current_downfall
-	for id,el in pairs(weather_mod.registered_downfalls) do
-		if weather.type == id then
-			current_downfall = el
-			break
-		end
-	end
+	local current_downfall = weather_mod.registered_downfalls[weather.type]
 	if current_downfall==nil then return end
 	for _, player in ipairs(minetest.get_connected_players()) do
 		local ppos = player:getpos()
-
-		-- Make sure player is not in a cave/house...
-		if minetest.env:get_node_light(ppos, 0.5) ~= 15 then return end
 
 		local wind_pos = vector.multiply(weather.wind,-1)
 
@@ -104,7 +114,8 @@ minetest.register_globalstep(function()
 			minacc=acc, maxacc=acc,
 			minexptime=exp, maxexptime=exp,
 			minsize=current_downfall.size, maxsize=current_downfall.size,
-			collisiondetection=false, vertical=true,
+			collisiondetection=true, collision_removal=true,
+			vertical=true,
 			texture=current_downfall.texture, player=player:get_player_name()})
 	end
 end)

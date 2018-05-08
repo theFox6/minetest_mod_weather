@@ -34,3 +34,5 @@ dofile(weather_mod.modpath.."/api.lua")
 dofile(weather_mod.modpath.."/rain.lua")
 dofile(weather_mod.modpath.."/snow.lua")
 dofile(weather_mod.modpath.."/command.lua")
+
+weather_mod.handle_lightning()

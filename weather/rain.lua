@@ -7,4 +7,5 @@ weather_mod.register_downfall("weather:rain",{
 	exptime=0.8,
 	size=25,
 	texture="weather_rain.png",
+	enable_lightning=true,
 })
