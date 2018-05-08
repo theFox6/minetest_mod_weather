@@ -4,6 +4,6 @@ read_globals = {
 	"minetest",
 	"dump", "vector",
 	"VoxelManip", "VoxelArea",
-	table = { fields = { "copy" } }
+	table = { fields = { "copy" } },
 	"lightning",
 }
