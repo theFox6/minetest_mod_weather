@@ -1,6 +1,6 @@
-Weather mod for [Minetest](http://minetest.net/)
+# Weather mod for [Minetest](http://minetest.net/)
 
-[![Luacheck Status](https://travis-ci.org/theFox6/minetest_mod_weather.svg?branch=master)](https://travis-ci.org/theFox6/minetest_mod_weather)
+Luacheck: [![Luacheck Status](https://travis-ci.org/theFox6/minetest_mod_weather.svg?branch=master)](https://travis-ci.org/theFox6/minetest_mod_weather)
 
 License:
 - Code: LGPL
