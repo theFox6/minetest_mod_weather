@@ -77,7 +77,7 @@ end
 
 minetest.register_globalstep(function()
 	if weather.type=="none" then
-		for id,el in pairs(weather_mod.registered_downfalls) do
+		for id,_ in pairs(weather_mod.registered_downfalls) do
 			if math.random(1, 50000) == 1 then
 				weather.wind = {}
 				weather.wind.x = math.random(0,10)

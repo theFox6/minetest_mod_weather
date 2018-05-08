@@ -5,4 +5,5 @@ read_globals = {
 	"dump", "vector",
 	"VoxelManip", "VoxelArea",
 	table = { fields = { "copy" } }
+	"lightning",
 }
