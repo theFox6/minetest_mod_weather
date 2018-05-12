@@ -9,7 +9,7 @@ weather_mod.register_downfall("weather:snow",{
 	texture="weather_snow.png"
 })
 
---[[local snow_box =
+local snow_box =
 {
 	type  = "fixed",
 	fixed = {-0.5, -0.5, -0.5, 0.5, -0.4, 0.5}
@@ -26,7 +26,7 @@ minetest.register_node("weather:snow_cover", {
 	drop = {}
 })
 
---[ Enable this section if you have a very fast PC
+--[[ Enable this section if you have a very fast PC
 minetest.register_abm({
 	nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},
 	neighbors = {"default:air"},
@@ -40,7 +40,7 @@ minetest.register_abm({
 				if minetest.env:get_node_light(np, 0.5) == 15
 				and minetest.env:get_node(np).name == "air" then
 					minetest.env:add_node(np, {name="weather:snow_cover"})
-        end
+				end
 			end
 		end
 	end
