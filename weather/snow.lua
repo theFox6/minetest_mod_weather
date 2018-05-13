@@ -34,7 +34,7 @@ if minetest.is_yes(minetest.settings:get_bool('weather_fast_pc')) then
 		neighbors = {"default:air"},
 		interval = 10.0,
 		chance = 80,
-		action = function (pos, node, active_object_count, active_object_count_wider)
+		action = function (pos, node)
 			if weather.type == "weather:snow" then
 				if minetest.registered_nodes[node.name].drawtype == "normal"
 				or minetest.registered_nodes[node.name].drawtype == "allfaces_optional" then
