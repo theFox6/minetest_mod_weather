@@ -1,0 +1,8 @@
+# Fast computer ABM
+#
+# The “fast computer ABM” controls if snow covers will be placed
+# on the ground when `weather:snow` is set. This needs a better
+# computer and should not be used if the performance drops too
+# much. It is advised not to enable this on servers and it is
+# disbaled by default
+weather_fast_pc (Snow covers for fast PCs) bool false
