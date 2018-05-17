@@ -7,18 +7,22 @@ minetest.register_privilege("weather", {
 minetest.register_chatcommand("setweather", {
 	params = "<weather>",
 	description = "Set weather to a registered type of downfall\
-		show all types when nor parameters are given", -- full description
+		show all types when no parameters are given", -- full description
 	privs = {weather = true},
 	func = function(name, param)
-		if param == nil or param == "" then
+		if param == nil or param == "" or param == "?" then
 			local types="none"
 			for i,_ in pairs(weather_mod.registered_downfalls) do
 				types=types..", "..i
 			end
 			minetest.chat_send_player(name, "avalible weather types: "..types)
 		else
-			weather.type = param
-			weather_mod.handle_lightning()
+			if weather_mod.registered_downfalls[param] == nil then
+				minetest.chat_send_player(name, "This type of weather is not registered. To list all types of weather run the command without parameters.")
+			else
+				weather.type = param
+				weather_mod.handle_lightning()
+			end
 		end
 	end
 })
