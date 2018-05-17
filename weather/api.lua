@@ -90,7 +90,9 @@ minetest.register_globalstep(function()
 	else
 		if math.random(1, 10000) == 1 then
 			weather.type = "none"
-			lightning.auto = false
+			if minetest.get_modpath("lightning") then
+				lightning.auto = false
+			end
 		end
 	end
 	local current_downfall = weather_mod.registered_downfalls[weather.type]
