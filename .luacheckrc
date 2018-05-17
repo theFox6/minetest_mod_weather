@@ -1,5 +1,3 @@
-allow_defined_top = true
-
 read_globals = {
 	"minetest",
 	"dump", "vector",
@@ -7,5 +5,3 @@ read_globals = {
 	table = { fields = { "copy" } },
 	"lightning",
 }
-
-ignore = {"122"}
