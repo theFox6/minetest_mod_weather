@@ -18,7 +18,8 @@ minetest.register_chatcommand("setweather", {
 			minetest.chat_send_player(name, "avalible weather types: "..types)
 		else
 			if weather_mod.registered_downfalls[param] == nil then
-				minetest.chat_send_player(name, "This type of weather is not registered. To list all types of weather run the command without parameters.")
+				minetest.chat_send_player(name, "This type of weather is not registered.\n"..
+					"To list all types of weather run the command without parameters.")
 			else
 				weather.type = param
 				weather_mod.handle_lightning()
