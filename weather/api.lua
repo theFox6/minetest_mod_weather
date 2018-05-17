@@ -68,6 +68,7 @@ end
 function weather_mod.handle_lightning()
 	if not minetest.get_modpath("lightning") then return end
 	local current_downfall = weather_mod.registered_downfalls[weather.type]
+	if not current_downfall then return end
 	lightning.auto = current_downfall.enable_lightning
 	if current_downfall.enable_lightning and math.random(1,2) == 1 then
 		local time = math.floor(math.random(lightning.interval_low/2,lightning.interval_low))
