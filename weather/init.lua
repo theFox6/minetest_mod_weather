@@ -5,8 +5,9 @@
 
 assert(minetest.add_particlespawner, "I told you to run the latest GitHub!")
 
-rawset(_G,"weather_mod",{})
-weather_mod.modpath=minetest.get_modpath("weather")
+weather_mod={
+	modpath=minetest.get_modpath("weather"),
+}
 
 weather = (function()
 	local file_name = minetest.get_worldpath() .. "/weather"

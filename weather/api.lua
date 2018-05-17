@@ -62,14 +62,14 @@ function weather_mod.register_downfall(id,def)
 end
 
 if minetest.get_modpath("lightning") then
-	rawset(lightning,"auto",false)
+	lightning.auto = false
 end
 
 function weather_mod.handle_lightning()
 	if not minetest.get_modpath("lightning") then return end
 	local current_downfall = weather_mod.registered_downfalls[weather.type]
 	if not current_downfall then return end
-	rawset(lightning,"auto",current_downfall.enable_lightning)
+	lightning.auto = current_downfall.enable_lightning
 	if current_downfall.enable_lightning and math.random(1,2) == 1 then
 		local time = math.floor(math.random(lightning.interval_low/2,lightning.interval_low))
 		minetest.after(time, lightning.strike)
@@ -92,7 +92,7 @@ minetest.register_globalstep(function()
 		if math.random(1, 10000) == 1 then
 			weather.type = "none"
 			if minetest.get_modpath("lightning") then
-				rawset(lightning,"auto",false)
+				lightning.auto = false
 			end
 		end
 	end
