@@ -101,6 +101,8 @@ minetest.register_globalstep(function()
 	for _, player in ipairs(minetest.get_connected_players()) do
 		local ppos = player:getpos()
 
+		if ppos.y > 200 then return end
+
 		local wind_pos = vector.multiply(weather.wind,-1)
 
 		local minp = vector.add(vector.add(ppos, current_downfall.min_pos),wind_pos)
