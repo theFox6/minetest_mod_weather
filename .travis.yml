@@ -6,8 +6,18 @@ addons:
     - luarocks
 before_install:
   - luarocks install --local luacheck
+env:
+  - CONFIG=.luacheckrc
+  - CONFIG=.luacheck_tidy
+matrix:
+  exclude:
+  - name: "health check"
+    env: CONFIG=.luacheckrc
+  allow_failures:
+  - name: "beauty check"
+    env: CONFIG=.luacheck_tidy
 script: 
-- $HOME/.luarocks/bin/luacheck --no-color .
+- $HOME/.luarocks/bin/luacheck --config $CONFIG .
 notifications:
   email:
     on_failure: change

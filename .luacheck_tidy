@@ -7,5 +7,3 @@ read_globals = {
 	table = { fields = { "copy" } },
 	"lightning",
 }
-
-ignore = {"211", "212", "213", "631"}
