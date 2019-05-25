@@ -28,9 +28,9 @@ minetest.register_chatcommand("setweather", {
 	end
 })
 
--- Set weather
+-- Set wind
 minetest.register_chatcommand("setwind", {
-	params = "<weather>",
+	params = "<wind>",
 	description = "Set windspeed to the given x,z direction", -- full description
 	privs = {weather = true},
 	func = function(name, param)

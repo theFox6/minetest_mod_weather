@@ -1,11 +1,23 @@
 allow_defined_top = true
 
 read_globals = {
+	"dump",
 	"minetest",
-	"dump", "vector",
-	"VoxelManip", "VoxelArea",
-	table = { fields = { "copy" } },
+	"vector",
+	"VoxelManip",
+	"VoxelArea",
+	table = { fields = {
+			"copy"
+	} },
 	"lightning",
 }
 
-ignore = {"211", "212", "213", "631"}
+ignore = {
+	"211",
+	"212",
+	"213",
+	"611",
+	"612",
+	"621",
+	"631"
+}
