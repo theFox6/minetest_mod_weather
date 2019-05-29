@@ -26,8 +26,8 @@ minetest.register_node("weather:snow_cover", {
 	drop = {}
 })
 
--- Snow cover ABM when weather_fast_pc setting is set to `true`
-if minetest.is_yes(minetest.settings:get_bool('weather_fast_pc')) then
+-- Snow cover ABM when snow_covers_abm setting is set to `true`
+if minetest.is_yes(minetest.settings:get_bool('snow_covers_abm')) then
 	minetest.log('action', '[weather] Loaded fast computer ABM (snow covers when weather:snow is set)')
 	minetest.register_abm({
 		nodenames = {"group:crumbly", "group:snappy", "group:cracky", "group:choppy"},

@@ -1,8 +1,18 @@
-# Fast computer ABM
+# Snow covers ABM
 #
-# The “fast computer ABM” controls if snow covers will be placed
-# on the ground when `weather:snow` is set. This needs a better
-# computer and should not be used if the performance drops too
-# much. It is advised not to enable this on servers and it is
-# disbaled by default
-weather_fast_pc (Snow covers for fast PCs) bool false
+# The "fast computer snow covers ABM” controls if snow covers
+# will be placed on the ground when `weather:snow` is set.
+# This needs a better computer and should not be used if the
+# performance drops too much. It is disabled by default.
+snow_covers_abm (Snow covers for fast PCs) bool false
+
+# Raycast hitcheck
+#
+# The "fast computer raycast hitcheck" controls if raycasts are
+# used to check if the player is affected by the downfall instead
+# of checking the lighting. If disabled the checks are already
+# very accurate because the sunlevel light can only be reached
+# without nodes nearby. Checking the light also works at night.
+# The raycasts only effect is that they also check the wind
+# direction. This might cause the performance to drop though.
+raycast_hitcheck (Raycast hitchecks for fast PCs) bool false

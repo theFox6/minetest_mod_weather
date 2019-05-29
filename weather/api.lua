@@ -46,22 +46,40 @@ function weather_mod.register_downfall(id,def)
 	if not ndef.amount then --number of textures spawned
 		ndef.amount = 10
 	end
-	if not ndef.exptime then
+	if not ndef.exptime then --when to delete the particles
 		ndef.exptime = ndef.max_pos.y / (math.sqrt(ndef.falling_acceleration) + ndef.falling_speed)
 	end
-	if not ndef.texture then
+	if not ndef.texture then --what the downfall looks like
 		error("no texture given")
 	end
-	if not ndef.size then
+	if not ndef.size then --the texture size
 		ndef.size = 25
 	end
 	if not ndef.enable_lightning then
 		ndef.enable_lightning=false
 	end
+	if not ndef.damage_player then --whether to damage the player
+		ndef.damage_player=false
+	else
+		if not ndef.damage_player.amount then
+			--how many half hearts
+			ndef.damage_player.amount = 1
+		end
+		if not ndef.damage_player.chance then
+			--0.5 is 50% btw.
+			ndef.damage_player.chance = 1
+		end
+		if not ndef.damage_player.time then
+			--after how many steps to damage
+			ndef.damage_player.time = 100
+		end
+	end
+	--actually register the downfall
 	weather_mod.registered_downfalls[name]=ndef
 end
 
 if minetest.get_modpath("lightning") then
+	--same as lightning.auto = false
 	rawset(lightning,"auto",false)
 end
 
@@ -73,6 +91,38 @@ function weather_mod.handle_lightning()
 	if current_downfall.enable_lightning and math.random(1,2) == 1 then
 		local time = math.floor(math.random(lightning.interval_low/2,lightning.interval_low))
 		minetest.after(time, lightning.strike)
+	end
+end
+
+local do_raycasts = minetest.is_yes(minetest.settings:get_bool('raycast_hitcheck'))
+local damage_steps = 0
+
+local function handle_damage(damage,player, downfall_origin)
+	if not damage then return end
+	damage_steps = damage_steps +1
+	if damage_steps < damage.steps then return end
+	damage_steps = 0
+	if do_raycasts then
+		-- this check should be more accurate
+		local hitpos = vector.add(player:get_pos(),vector.new(0,1,0))
+		local ray = minetest.raycast(downfall_origin,hitpos)
+		local o = ray:next()
+		if o.type~="object" then return end -- hit node or something
+		if not o.ref:is_player() then return end -- hit different object
+		if o.ref:get_player_name() ~= player:get_player_name() then
+			return --hit other player
+		end
+		o = ray:next()
+		if o then
+			minetest.log("warning","[weather] raycast hit more after hitting the player\n"..
+				dump2(o,"o"))
+		end
+	else
+		--check if player is affected by downfall, if it's dark there are nodes nearby
+		if minetest.env:get_node_light(player:getpos(), 0.5) ~= 15 then return end
+	end
+	if math.random() < damage.chance then
+		player:set_hp(player:get_hp()-damage.amount)
 	end
 end
 
@@ -122,5 +172,7 @@ minetest.register_globalstep(function()
 			collisiondetection=true, collision_removal=true,
 			vertical=true,
 			texture=current_downfall.texture, player=player:get_player_name()})
+		local downfall_origin = vector.divide(vector.add(minp,maxp),2)
+		handle_damage(current_downfall.damage_player,player,downfall_origin)
 	end
 end)
