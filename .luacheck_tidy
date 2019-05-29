@@ -2,7 +2,7 @@ allow_defined_top = true
 
 read_globals = {
 	"minetest",
-	"dump", "vector",
+	"dump2", "vector",
 	"VoxelManip", "VoxelArea",
 	table = { fields = { "copy" } },
 	"lightning",

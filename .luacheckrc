@@ -1,7 +1,7 @@
 allow_defined_top = true
 
 read_globals = {
-	"dump",
+	"dump2",
 	"minetest",
 	"vector",
 	"VoxelManip",
