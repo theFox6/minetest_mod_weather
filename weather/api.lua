@@ -100,7 +100,7 @@ local damage_steps = 0
 local function handle_damage(damage,player, downfall_origin)
 	if not damage then return end
 	damage_steps = damage_steps +1
-	if damage_steps < damage.steps then return end
+	if damage_steps < damage.time then return end
 	damage_steps = 0
 	if do_raycasts then
 		-- this check should be more accurate
