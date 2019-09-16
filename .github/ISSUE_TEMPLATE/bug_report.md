@@ -1,6 +1,9 @@
 ---
 name: Bug report
 about: Report a bug to help fixing it
+title: ''
+labels: unconfirmed bug
+assignees: ''
 
 ---
 
