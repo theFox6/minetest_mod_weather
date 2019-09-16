@@ -2,6 +2,8 @@
 
 Luacheck: [![Luacheck Status](https://travis-ci.org/theFox6/minetest_mod_weather.svg?branch=master)](https://travis-ci.org/theFox6/minetest_mod_weather)
 
+Support for waterplus mod for rain added by sloantothebone
+
 License:
 - Code: LGPL
 - Textures:
