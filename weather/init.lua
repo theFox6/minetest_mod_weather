@@ -3,7 +3,7 @@
 -- * snow
 -- * wind
 
-assert(minetest.add_particlespawner, "I told you to run the latest GitHub!")
+assert(minetest.add_particlespawner, "You have some really old minetest...")
 
 weather_mod={
 	modpath=minetest.get_modpath("weather"),
