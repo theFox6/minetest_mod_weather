@@ -1,14 +1,12 @@
 ---
 name: Bug report
 about: Report a bug to help fixing it
-title: ''
 labels: unconfirmed bug
-assignees: ''
 
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+Insert a description of what the bug is.
 
 **To Reproduce**
 If known, steps to reproduce the behavior:
@@ -18,7 +16,7 @@ If known, steps to reproduce the behavior:
 4. See error
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+Insert a description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
