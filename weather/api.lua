@@ -28,51 +28,56 @@ local function check_modname_prefix(name)
 	end
 end
 
+local function set_defaults(vt,rt)
+  for i,v in pairs(rt) do
+    if not vt[i] then
+      vt[i] = v
+    end
+  end
+end
+
+local default_downfall = {
+  --minimum starting position
+  min_pos = {x=-9, y=10, z=-9},
+  --maximum starting position
+  max_pos = {x=9, y=10, z=9},
+  --y falling speed
+  falling_speed = 10,
+  --number of textures spawned
+  amount = 10,
+  --the texture size
+  size = 25,
+  --whether lightning schould be enabled
+  enable_lightning=false,
+  --whether to damage the player
+  damage_player=false
+}
+
+local default_damage = {
+  --how many half hearts
+  amount = 1,
+  --chance to damage: .5 is 50% btw.
+  chance = 1,
+  --after how many steps to damage
+  time = 100
+}
 
 function weather_mod.register_downfall(id,def)
 	local name = check_modname_prefix(id)
 	if name == "none" then error("\"none\" means none, thanks") end
 	if weather_mod.registered_downfalls[name]~=nil then error(name.." is already registered") end
 	local ndef = table.copy(def)
-	if not ndef.min_pos then --minimum starting position
-		ndef.min_pos = {x=-9, y=10, z=-9}
-	end
-	if not ndef.maxp then --maximum starting position
-		ndef.max_pos = {x= 9, y=10, z= 9}
-	end
-	if not ndef.falling_speed then --y falling speed
-		ndef.falling_speed = 10
-	end
-	if not ndef.amount then --number of textures spawned
-		ndef.amount = 10
-	end
-	if not ndef.exptime then --when to delete the particles
+	--what the downfall looks like
+	if not ndef.texture then
+    error("no texture given")
+  end
+	set_defaults(ndef,default_downfall)
+	--when to delete the particles
+	if not ndef.exptime then 
 		ndef.exptime = ndef.max_pos.y / (math.sqrt(ndef.falling_acceleration) + ndef.falling_speed)
 	end
-	if not ndef.texture then --what the downfall looks like
-		error("no texture given")
-	end
-	if not ndef.size then --the texture size
-		ndef.size = 25
-	end
-	if not ndef.enable_lightning then
-		ndef.enable_lightning=false
-	end
-	if not ndef.damage_player then --whether to damage the player
-		ndef.damage_player=false
-	else
-		if not ndef.damage_player.amount then
-			--how many half hearts
-			ndef.damage_player.amount = 1
-		end
-		if not ndef.damage_player.chance then
-			--0.5 is 50% btw.
-			ndef.damage_player.chance = 1
-		end
-		if not ndef.damage_player.time then
-			--after how many steps to damage
-			ndef.damage_player.time = 100
-		end
+	if ndef.damage_player then
+    set_defaults(ndef.damage_player,default_damage)
 	end
 	--actually register the downfall
 	weather_mod.registered_downfalls[name]=ndef
