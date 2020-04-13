@@ -1,12 +1,23 @@
 -- Snow
 weather_mod.register_downfall("weather:snow",{
-	min_pos = {x=-9, y=7, z=-9},
-	max_pos = {x= 9, y=7, z= 9},
+	min_pos = {x=-15, y=7, z=-15},
+	max_pos = {x= 15, y=7, z= 15},
 	falling_speed=5,
-	amount=10,
+	amount=15,
 	exptime=5,
 	size=25,
-	texture="weather_snow.png"
+	texture="weather_snow.png",
+})
+
+weather_mod.register_downfall("weather:hail",{
+  min_pos = {x=-15, y=7, z=-15},
+  max_pos = {x= 15, y=7, z= 15},
+  falling_speed=25,
+  amount=15,
+  exptime=0.8,
+  size=25,
+  texture="weather_hail.png",
+  enable_lightning = true,
 })
 
 local snow_box =

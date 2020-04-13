@@ -3,7 +3,7 @@
 -- * snow
 -- * wind
 
-assert(minetest.add_particlespawner, "You have some really old minetest...")
+assert(minetest.add_particlespawner, "Weather doesn't work with this really old minetest.")
 
 weather_mod={
 	modpath=minetest.get_modpath("weather"),
@@ -32,6 +32,7 @@ end) ()
 
 dofile(weather_mod.modpath.."/api.lua")
 dofile(weather_mod.modpath.."/rain.lua")
+dofile(weather_mod.modpath.."/sand.lua")
 dofile(weather_mod.modpath.."/snow.lua")
 dofile(weather_mod.modpath.."/command.lua")
 
