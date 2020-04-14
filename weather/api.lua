@@ -53,12 +53,14 @@ local default_downfall = {
   damage_player=false,
   --how much wind is needed to trigger the weather
   min_wind = 0,
+  --stops weather
+  disabled = false,
 }
 
 local default_damage = {
   --how many half hearts
   amount = 1,
-  --chance to damage: .5 is 50% btw.
+  --chance to damage: .5 is 50%
   chance = 1,
   --after how many steps to damage
   time = 100
@@ -85,19 +87,24 @@ function weather_mod.register_downfall(id,def)
 	weather_mod.registered_downfalls[name]=ndef
 end
 
-function weather_mod.unregister_downfall(id)
-  weather_mod.registered_downfalls[id] = nil
+function weather_mod.disable_downfall(id,disable)
+  local state = disable
+  if disable == nil then
+    state = true
+  end
+  weather_mod.registered_downfalls[id].disabled = state
 end
 
 if minetest.get_modpath("lightning") then
-	--same as lightning.auto = false
-	rawset(lightning,"auto",false)
+	lightning.auto = false
+	--rawset(lightning,"auto",false)
 end
 
 function weather_mod.handle_lightning(current_weather)
   if not minetest.get_modpath("lightning") then return end
   if not current_weather then return end
-  rawset(lightning,"auto",current_weather.enable_lightning)
+  lightning.auto = current_weather.enable_lightning
+  --rawset(lightning,"auto",current_weather.enable_lightning)
   if current_weather.enable_lightning and math.random(1,2) == 1 then
   local time = math.floor(math.random(lightning.interval_low/2,lightning.interval_low))
     minetest.after(time, lightning.strike)
@@ -136,28 +143,7 @@ local function handle_damage(damage,player, downfall_origin)
 	end
 end
 
-minetest.register_globalstep(function()
-  if math.random(1, 10000) == 1 then
-    weather.type = "none"
-    if minetest.get_modpath("lightning") then
-      rawset(lightning,"auto",false)
-    end
-  else
-    for id,w in pairs(weather_mod.registered_downfalls) do
-      if math.random(1, 50000) == 1 then
-        weather.wind = {}
-        weather.wind.x = math.random(0,10)
-        weather.wind.y = 0
-        weather.wind.z = math.random(0,10)
-        if vector.length(weather.wind) >= w.min_wind then
-          weather.type = id
-          weather_mod.handle_lightning(w)
-          break
-        end
-      end
-    end
-  end
-
+local function weather_step()
   local current_downfall = weather_mod.registered_downfalls[weather.type]
   if current_downfall==nil then return end
   for _, player in ipairs(minetest.get_connected_players()) do
@@ -190,4 +176,31 @@ minetest.register_globalstep(function()
     local downfall_origin = vector.divide(vector.add(minp,maxp),2)
     handle_damage(current_downfall.damage_player,player,downfall_origin)
   end
+end
+
+minetest.register_globalstep(function()
+  if math.random(1, 10000) == 1 then
+    weather.type = "none"
+    if minetest.get_modpath("lightning") then
+      lightning.auto = false
+      --rawset(lightning,"auto",false)
+    end
+  else
+    for id,w in pairs(weather_mod.registered_downfalls) do
+      if math.random(1, 50000) == 1 then
+        weather.wind = {
+          x = math.random(0,10),
+          y = 0,
+          z = math.random(0,10)
+        }
+        if (not w.disabled) and vector.length(weather.wind) >= w.min_wind then
+          weather.type = id
+          weather_mod.handle_lightning(w)
+          break
+        end
+      end
+    end
+  end
+
+  weather_step()
 end)

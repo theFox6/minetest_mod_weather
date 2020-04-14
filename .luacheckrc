@@ -1,4 +1,4 @@
-allow_defined_top = true
+max_line_length = false
 
 read_globals = {
 	"dump2",
@@ -9,15 +9,26 @@ read_globals = {
 	table = { fields = {
 			"copy"
 	} },
-	"lightning",
+	lightning = {
+		fields = {
+			auto = {
+				read_only = false
+			}
+		},
+		other_fields = true
+	},
 }
 
+globals = {
+	"weather",
+	"weather_mod"
+}
+
+exclude_files = {"weather/development/"}
+
 ignore = {
-	"211",
-	"212",
-	"213",
-	"611",
-	"612",
-	"621",
-	"631"
+	--unused variables
+	"21.",
+	--whitespace
+	"61.",
 }

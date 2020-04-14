@@ -1,9 +1,0 @@
-allow_defined_top = true
-
-read_globals = {
-	"minetest",
-	"dump2", "vector",
-	"VoxelManip", "VoxelArea",
-	table = { fields = { "copy" } },
-	"lightning",
-}
