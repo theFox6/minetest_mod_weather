@@ -1,4 +1,6 @@
-weather_mod.registered_downfalls = {}
+local storage = minetest.get_mod_storage()
+
+weather.registered_downfalls = {}
 
 local function check_modname_prefix(name)
 	if name:sub(1,1) == ":" then
@@ -66,10 +68,10 @@ local default_damage = {
   time = 100
 }
 
-function weather_mod.register_downfall(id,def)
+function weather.register_downfall(id,def)
 	local name = check_modname_prefix(id)
 	if name == "none" then error("\"none\" means none, thanks") end
-	if weather_mod.registered_downfalls[name]~=nil then error(name.." is already registered") end
+	if weather.registered_downfalls[name]~=nil then error(name.." is already registered") end
 	local ndef = table.copy(def)
 	--what the downfall looks like
 	if not ndef.texture then
@@ -78,26 +80,26 @@ function weather_mod.register_downfall(id,def)
 	set_defaults(ndef,default_downfall)
 	--when to delete the particles
 	if not ndef.exptime then
-		ndef.exptime = ndef.max_pos.y / (math.sqrt(ndef.falling_acceleration) + ndef.falling_speed)
+		ndef.exptime = ndef.max_pos.y / ndef.falling_speed
 	end
 	if ndef.damage_player then
     set_defaults(ndef.damage_player,default_damage)
 	end
 	--actually register the downfall
-	weather_mod.registered_downfalls[name]=ndef
+	weather.registered_downfalls[name]=ndef
 end
 
-function weather_mod.disable_downfall(id,disable)
+function weather.disable_downfall(id,disable)
   local state = disable
   if disable == nil then
     state = true
   end
-  weather_mod.registered_downfalls[id].disabled = state
+  weather.registered_downfalls[id].disabled = state
 end
 
+--[[
 if minetest.get_modpath("lightning") then
 	lightning.auto = false
-	--rawset(lightning,"auto",false)
 end
 
 function weather_mod.handle_lightning(current_weather)
@@ -110,9 +112,46 @@ function weather_mod.handle_lightning(current_weather)
     minetest.after(time, lightning.strike)
   end
 end
+]]
 
 local do_raycasts = minetest.is_yes(minetest.settings:get_bool('raycast_hitcheck'))
 local damage_steps = 0
+
+local function get_player_meta(player)
+  local p = player
+  if type(player) == "string" then
+    p = minetest.get_player_by_name(player)
+  end
+  return p:get_meta()
+end
+
+function weather.get_weather(player)
+  local meta = get_player_meta(player)
+  return meta:get_string("weather_type")
+end
+
+function weather.set_weather(player,type)
+  local meta = get_player_meta(player)
+  meta:set_string("weather_type",type)
+end
+
+function weather.get_wind()
+  return {
+    x = storage:get_float("wind_x"),
+    y = 0,
+    z = storage:get_float("wind_z")
+  }
+end
+
+function weather.set_wind(x,z)
+  if type(x) == "table" then
+    storage:set_float("wind_x",x.x)
+    storage:set_float("wind_z",x.z)
+  else
+    storage:set_float("wind_x",x)
+    storage:set_float("wind_z",z)
+  end
+end
 
 local function handle_damage(damage,player, downfall_origin)
 	if not damage then return end
@@ -143,64 +182,67 @@ local function handle_damage(damage,player, downfall_origin)
 	end
 end
 
-local function weather_step()
-  local current_downfall = weather_mod.registered_downfalls[weather.type]
-  if current_downfall==nil then return end
-  for _, player in ipairs(minetest.get_connected_players()) do
-    local ppos = player:getpos()
+local function weather_step(player,meta)
+  local weather_type = meta:get_string("weather_type")
+  if weather_type and weather_type ~= "" and weather_type ~= "none" then
+    local current_downfall = weather.registered_downfalls[weather_type]
+    if current_downfall then
+      local ppos = player:getpos()
+  
+      if ppos.y > 120 then return end
+  
+      local wind = weather.get_wind()
+      local wind_pos = vector.multiply(wind,-1)
 
-    if ppos.y > 120 then return end
-
-    local wind_pos = vector.multiply(weather.wind,-1)
-
-    local minp = vector.add(vector.add(ppos, current_downfall.min_pos),wind_pos)
-    local maxp = vector.add(vector.add(ppos, current_downfall.max_pos),wind_pos)
-
-    local vel = {x=weather.wind.x,y=-current_downfall.falling_speed,z=weather.wind.z}
-    local acc = {x=0, y=0, z=0}
-
-    local exp = current_downfall.exptime
-
-    minetest.add_particlespawner({
-      amount=current_downfall.amount, time=0.5,
-      minpos=minp, maxpos=maxp,
-      minvel=vel, maxvel=vel,
-      minacc=acc, maxacc=acc,
-      minexptime=exp, maxexptime=exp,
-      minsize=current_downfall.size, maxsize=current_downfall.size,
-      collisiondetection=true, collision_removal=true,
-      vertical=true,
-      texture=current_downfall.texture, player=player:get_player_name()
-    })
-
-    local downfall_origin = vector.divide(vector.add(minp,maxp),2)
-    handle_damage(current_downfall.damage_player,player,downfall_origin)
+      local minp = vector.add(vector.add(ppos, current_downfall.min_pos),wind_pos)
+      local maxp = vector.add(vector.add(ppos, current_downfall.max_pos),wind_pos)
+    
+      local vel = {x=wind.x,y=-current_downfall.falling_speed,z=wind.z}
+      local acc = {x=0, y=0, z=0}
+    
+      local exp = current_downfall.exptime
+    
+      minetest.add_particlespawner({
+        amount=current_downfall.amount, time=0.5,
+        minpos=minp, maxpos=maxp,
+        minvel=vel, maxvel=vel,
+        minacc=acc, maxacc=acc,
+        minexptime=exp, maxexptime=exp,
+        minsize=current_downfall.size, maxsize=current_downfall.size,
+        collisiondetection=true, collision_removal=true,
+        vertical=true,
+        texture=current_downfall.texture, playername=player:get_player_name()
+      })
+  
+      local downfall_origin = vector.divide(vector.add(minp,maxp),2)
+      handle_damage(current_downfall.damage_player,player,downfall_origin)
+    end
   end
 end
 
 minetest.register_globalstep(function()
-  if math.random(1, 10000) == 1 then
-    weather.type = "none"
-    if minetest.get_modpath("lightning") then
-      lightning.auto = false
-      --rawset(lightning,"auto",false)
-    end
-  else
-    for id,w in pairs(weather_mod.registered_downfalls) do
-      if math.random(1, 50000) == 1 then
-        weather.wind = {
-          x = math.random(0,10),
-          y = 0,
-          z = math.random(0,10)
-        }
-        if (not w.disabled) and vector.length(weather.wind) >= w.min_wind then
-          weather.type = id
-          weather_mod.handle_lightning(w)
-          break
+  if math.random(1, 50000) == 1 then
+    weather.set_wind(math.random(0,10),math.random(0,10))
+  end
+  for _, player in ipairs(minetest.get_connected_players()) do
+    local meta = get_player_meta(player)
+    if math.random(1, 10000) == 1 then
+      meta:set_string("weather_type","none")
+      --[[if minetest.get_modpath("lightning") then
+        lightning.auto = false
+      end]]
+    else
+      for id,w in pairs(weather.registered_downfalls) do
+        if math.random(1, 50000) == 1 then
+          if (not w.disabled) and vector.length(weather.get_wind()) >= w.min_wind then
+            meta:set_string("weather_type",id)
+            --weather_mod.handle_lightning(w)
+            break
+          end
         end
       end
     end
-  end
 
-  weather_step()
+    weather_step(player,meta)
+  end
 end)

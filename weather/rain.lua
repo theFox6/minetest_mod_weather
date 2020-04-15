@@ -1,5 +1,5 @@
 -- Rain
-weather_mod.register_downfall("weather:rain",{
+weather.register_downfall("weather:rain",{
 	min_pos = {x=-15, y=7, z=-15},
 	max_pos = {x= 15, y=7, z= 15},
 	falling_speed=10,
@@ -10,7 +10,7 @@ weather_mod.register_downfall("weather:rain",{
 	enable_lightning=true,
 })
 
-weather_mod.register_downfall("weather:storm",{
+weather.register_downfall("weather:storm",{
   min_pos = {x = -15, y = 7, z = -15},
   max_pos = {x = 15, y = 7, z = 15},
   falling_speed = 10,

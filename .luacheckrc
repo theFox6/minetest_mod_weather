@@ -21,7 +21,6 @@ read_globals = {
 
 globals = {
 	"weather",
-	"weather_mod"
 }
 
 exclude_files = {"weather/development/"}

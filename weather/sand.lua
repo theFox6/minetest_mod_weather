@@ -1,4 +1,4 @@
-weather_mod.register_downfall("weather:sandstorm",{
+weather.register_downfall("weather:sandstorm",{
   min_pos = {x=-20, y=0, z=-20},
   max_pos = {x= 20, y=2, z= 20},
   falling_speed=-1,
