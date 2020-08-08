@@ -170,7 +170,7 @@ local function weather_step()
       minsize=current_downfall.size, maxsize=current_downfall.size,
       collisiondetection=true, collision_removal=true,
       vertical=true,
-      texture=current_downfall.texture, player=player:get_player_name()
+      texture=current_downfall.texture, playername=player:get_player_name()
     })
 
     local downfall_origin = vector.divide(vector.add(minp,maxp),2)
