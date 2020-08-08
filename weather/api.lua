@@ -136,7 +136,7 @@ local function handle_damage(damage,player, downfall_origin)
 		end
 	else
 		--check if player is affected by downfall, if it's dark there are nodes nearby
-		if minetest.env:get_node_light(player:getpos(), 0.5) ~= 15 then return end
+		if minetest.env:get_node_light(player:get_pos(), 0.5) ~= 15 then return end
 	end
 	if math.random() < damage.chance then
 		player:set_hp(player:get_hp()-damage.amount)
@@ -147,7 +147,7 @@ local function weather_step()
   local current_downfall = weather_mod.registered_downfalls[weather.type]
   if current_downfall==nil then return end
   for _, player in ipairs(minetest.get_connected_players()) do
-    local ppos = player:getpos()
+    local ppos = player:get_pos()
 
     if ppos.y > 120 then return end
 
