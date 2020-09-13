@@ -23,6 +23,7 @@ minetest.register_chatcommand("setweather", {
 			else
 				weather.type = param
 				weather_mod.handle_lightning()
+				weather_mod.handle_weather_change({type = param, reason = "command", player = name})
 			end
 		end
 	end
@@ -46,6 +47,7 @@ minetest.register_chatcommand("setwind", {
 		end
 		if x and z then
 			weather.wind = vector.new(x,0,z)
+			weather_mod.handle_weather_change({wind = true, reason = "command", player = name})
 		else
 			minetest.chat_send_player(name, param.." are not two comma seperated numbers")
 		end

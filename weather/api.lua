@@ -1,4 +1,5 @@
 weather_mod.registered_downfalls = {}
+weather_mod.registered_weather_change_callbacks = {}
 
 local function check_modname_prefix(name)
 	if name:sub(1,1) == ":" then
@@ -85,6 +86,18 @@ function weather_mod.register_downfall(id,def)
 	end
 	--actually register the downfall
 	weather_mod.registered_downfalls[name]=ndef
+end
+
+function weather_mod.register_on_weather_change(callback)
+	local ct = type(callback)
+	assert(ct == "function", "on_weather_change callback must be a function, got a " + ct)
+	table.insert(weather_mod.registered_weather_change_callbacks,callback)
+end
+
+function weather_mod.handle_weather_change(changes)
+	for _,c in pairs(weather_mod.registered_weather_change_callbacks) do
+		c(changes)
+	end
 end
 
 function weather_mod.disable_downfall(id,disable)
@@ -185,9 +198,11 @@ minetest.register_globalstep(function()
       lightning.auto = false
       --rawset(lightning,"auto",false)
     end
+    weather_mod.handle_weather_change({type = "none", reason = "globalstep"})
   else
+    local cnum = 10000 * #weather_mod.registered_downfalls
     for id,w in pairs(weather_mod.registered_downfalls) do
-      if math.random(1, 50000) == 1 then
+      if math.random(1, cnum) == 1 then
         weather.wind = {
           x = math.random(0,10),
           y = 0,
@@ -196,6 +211,7 @@ minetest.register_globalstep(function()
         if (not w.disabled) and vector.length(weather.wind) >= w.min_wind then
           weather.type = id
           weather_mod.handle_lightning(w)
+          weather_mod.handle_weather_change({type = id, wind = true, reason = "globalstep"})
           break
         end
       end
