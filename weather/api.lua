@@ -1,4 +1,5 @@
 weather_mod.registered_downfalls = {}
+weather_mod.registered_downfall_count = 0
 weather_mod.registered_weather_change_callbacks = {}
 
 local function check_modname_prefix(name)
@@ -74,18 +75,19 @@ function weather_mod.register_downfall(id,def)
 	local ndef = table.copy(def)
 	--what the downfall looks like
 	if not ndef.texture then
-    error("no texture given")
-  end
+		error("no texture given")
+	end
 	set_defaults(ndef,default_downfall)
 	--when to delete the particles
 	if not ndef.exptime then
 		ndef.exptime = ndef.max_pos.y / (math.sqrt(ndef.falling_acceleration) + ndef.falling_speed)
 	end
 	if ndef.damage_player then
-    set_defaults(ndef.damage_player,default_damage)
+		set_defaults(ndef.damage_player,default_damage)
 	end
 	--actually register the downfall
 	weather_mod.registered_downfalls[name]=ndef
+	weather_mod.registered_downfall_count = weather_mod.registered_downfall_count + 1
 end
 
 function weather_mod.register_on_weather_change(callback)
@@ -200,7 +202,7 @@ minetest.register_globalstep(function()
     end
     weather_mod.handle_weather_change({type = "none", reason = "globalstep"})
   else
-    local cnum = 10000 * #weather_mod.registered_downfalls
+    local cnum = 10000 * weather_mod.registered_downfall_count
     for id,w in pairs(weather_mod.registered_downfalls) do
       if math.random(1, cnum) == 1 then
         weather.wind = {
