@@ -16,3 +16,13 @@ snow_covers_abm (Snow covers for fast PCs) bool false
 # The raycasts only effect is that they also check the wind
 # direction. This might cause the performance to drop though.
 raycast_hitcheck (Raycast hitchecks for fast PCs) bool false
+
+# Light Roof Check
+#
+# This setting controls if light data from the VoxelManipulator is
+# used to check if the player is under a roof and cannot see the downfall.
+# If disabled the weather may appear in caves and under other high roofs.
+# If enabled it may have an impact on the performance of a server.
+# The light checks are made in the areas around each player.
+# Hence it will cost more performance the more players are on a server.
+light_roofcheck (Light Roof Check for fast PCs) bool true

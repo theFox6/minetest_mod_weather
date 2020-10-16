@@ -31,6 +31,7 @@ weather = (function()
 end) ()
 
 dofile(weather_mod.modpath.."/api.lua")
+dofile(weather_mod.modpath.."/engine.lua")
 dofile(weather_mod.modpath.."/rain.lua")
 dofile(weather_mod.modpath.."/sand.lua")
 dofile(weather_mod.modpath.."/snow.lua")
