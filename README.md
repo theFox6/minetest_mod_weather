@@ -1,6 +1,6 @@
 # Weather mod for [Minetest](http://minetest.net/)
 [![luacheck][luacheck badge]][luacheck workflow]
-[![ContentDB][ContenDB badge]][ContentDB page]  
+[![ContentDB][ContentDB badge]][ContentDB page]  
 
 License:
 - Code: LGPL
